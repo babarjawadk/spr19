@@ -9,8 +9,7 @@ public class DebugExercise2 {
     public static int max(int a, int b) {
         if (a >= b) {
             return a;
-        }
-        else {
+        } else {
             return b;
         }
     }
