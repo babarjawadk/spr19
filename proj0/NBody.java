@@ -2,20 +2,20 @@ public class NBody {
 
   public static double readRadius(String fileName) {
     In in = new In(fileName);
-    int noPlanets = in.readInt();
+    int noBodies = in.readInt();
     double radius = in.readDouble();
     return radius;
   }
 
-  public static Planet[] readPlanets(String fileName) {
+  public static Planet[] readBodies(String fileName) {
     In in = new In(fileName);
 
-    int noPlanets = in.readInt();
+    int noBodies = in.readInt();
     double radius = in.readDouble();
 
-    Planet[] bodies = new Planet[noPlanets];
+    Planet[] bodies = new Planet[noBodies];
 
-    for (int i = 0; i < noPlanets; i++) {
+    for (int i = 0; i < noBodies; i++) {
       double xxPos = in.readDouble();
       double yyPos = in.readDouble();
       double xxVel = in.readDouble();
@@ -35,7 +35,7 @@ public class NBody {
     String fileName = args[2];
 
     double radius = readRadius(fileName);
-    Planet[] bodies = readPlanets(fileName);
+    Planet[] bodies = readBodies(fileName);
 
     int noBodies = bodies.length;
 
