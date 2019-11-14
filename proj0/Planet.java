@@ -4,9 +4,9 @@ public class Planet {
   public double xxVel;
   public double yyVel;
   public double mass;
-  String imgFileName;
+  public String imgFileName;
 
-  public static final double G = 6.67e-11; // static: cannot be altered, public: available to the outsie world
+  private static final double G = 6.67e-11; // static: cannot be altered, public: available to the outsie world
 
   public Planet(double xP, double yP, double xV,
               double yV, double m, String img) {
