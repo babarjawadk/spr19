@@ -4,18 +4,19 @@ import java.util.Formatter;
  * A naked recursive list of integers, similar to what we saw in lecture 3, but
  * with a large number of additional methods.
  *
- * @author P. N. Hilfinger, with some modifications by Josh Hug and melaniecebula
+ * @author P. N. Hilfinger, with some modifications
+ * by Josh Hug and melaniecebula
  *         [Do not modify this file.]
  */
 public class IntList {
     /**
      * First element of list.
      */
-    public int first;
+    private int first;
     /**
      * Remaining elements of list.
      */
-    public IntList rest;
+    private IntList rest;
 
     /**
      * A List with first FIRST0 and rest REST0.
@@ -105,6 +106,18 @@ public class IntList {
         }
     }
 
+    /**
+     * Returns the reverse of an IntList A destructively.
+     */
+    public static IntList reverse(IntList A) {
+        if (A == null) {
+            return null;
+        }
+        IntList tmp = dcatenate(reverse(A.rest), new IntList(A.first, null));
+        A.first = tmp.first;
+        A.rest = tmp.rest;
+        return A;
+    }
 
 
 
@@ -176,7 +189,7 @@ public class IntList {
     }
 
     /**
-     * If a cycle exists in the IntList, this method
+     * If a cycle exists in the IntList A, this method
      * returns an integer equal to the item number of the location where the
      * cycle is detected.
      * <p>

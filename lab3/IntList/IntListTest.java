@@ -44,9 +44,9 @@ public class IntListTest {
     public void testSquareListRecursive() {
         IntList L = IntList.of(1, 2, 3);
         IntList res = IntList.squareListRecursive(L);
-        assertEquals(IntList.of(1, 2, 3), L);
-        assertEquals(IntList.of(1, 4, 9), res);
-    }
+    assertEquals(IntList.of(1, 2, 3), L);
+    assertEquals(IntList.of(1, 4, 9), res);
+}
 
     @Test
     public void testDcatenate() {
@@ -64,6 +64,18 @@ public class IntListTest {
         IntList exp = IntList.of(1, 2, 3, 4, 5, 6);
         assertEquals(exp, IntList.catenate(A, B));
         assertEquals(IntList.of(1, 2, 3), A);
+    }
+
+    @Test
+    public void testReverse() {
+        IntList L = IntList.of(1, 2, 3, 4, 5, 6);
+        IntList exp = IntList.of(6, 5, 4, 3, 2, 1);
+        IntList res = IntList.reverse(L);
+
+        assertEquals(exp, res);
+        assertEquals(L, exp);
+        assertNotEquals(IntList.of(1, 2, 3, 4, 5, 6), L);
+        assertEquals(IntList.reverse(null), null);
     }
 
     /** If you're running this from the command line, you'll need
