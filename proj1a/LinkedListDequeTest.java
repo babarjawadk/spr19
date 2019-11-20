@@ -121,6 +121,11 @@ public class LinkedListDequeTest {
 		someList.printDeque();
 		copy.printDeque();
 
+        LinkedListDeque<Integer> secondList = new LinkedListDeque<>();
+        for (int i = 0; i < 50; i+= 1) {
+            secondList.addLast(i);
+        }
+        System.out.println(secondList.get(0));
 
 
 	}

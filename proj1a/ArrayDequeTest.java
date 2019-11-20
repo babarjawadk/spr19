@@ -85,6 +85,7 @@ public class ArrayDequeTest {
     }
 
     public static void main(String[] args) {
+
         System.out.println("Running tests.\n");
         addIsEmptySizeTest();
         addRemoveTest();
@@ -117,6 +118,12 @@ public class ArrayDequeTest {
         someArray.removeLast();
         someArray.removeFirst();
         someArray.addLast(55);
+        someArray.addFirst(19);
+        someArray.addFirst(20);
+        someArray.addFirst(21);
+        someArray.addFirst(22);
+        someArray.addFirst(24);
+        someArray.addFirst(25);
         System.out.println("get:");
         System.out.println(someArray.get(4));
 
@@ -136,9 +143,28 @@ public class ArrayDequeTest {
         someArray.printDeque();
         copy.printDeque();
 
+        System.out.println("get: ");
+        for (int i = 0; i < copy.size(); i+= 1) {
 
+            System.out.print(copy.get(i));
+            System.out.print(" ");
+        }
+        System.out.println();
 
+        //null 25 24 22 21 20 19 19 16 9 7 6 5 4 3 2 1 8 10 17 18 20 21
 
+        //25 24 22 21 20 19 22 19 16 9 7 6 5 4 3 2 1 8 10 17 18 20 21
+
+        //25 24 22 21 20 19 19 16 9 7 6 5 4 3 2 1 8 10 17 18 20 21 null
+
+        ArrayDeque<Integer> downSizeArray = new ArrayDeque<>();
+        for (int i = 0; i < 1024; i += 1) {
+            downSizeArray.addFirst(i);
+        }
+        for (int i = 0; i < 1020; i += 1) {
+            downSizeArray.removeLast();
+        }
+        System.out.println(downSizeArray);
 
     }
 } 
