@@ -11,6 +11,9 @@ public class Palindrome {
 
 
     public boolean isPalindrome(String word) {
+
+
+
         return isPalindrome(wordToDeque(word));
     }
 
@@ -24,15 +27,18 @@ public class Palindrome {
         }
     }
 
-    /*
-    public boolean isPalindrome(String word) {
-        Deque deque = wordToDeque(word);
-        for (int i = 0; i < deque.size(); i++) {
-            if (deque.get(i) != deque.get(deque.size()-1-i)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isPalindrome(String word, CharacterComparator cc) {
+        return isPalindrome(wordToDeque(word), cc);
     }
-     */
+
+    private static boolean isPalindrome(Deque arrayWord, CharacterComparator cc) {
+        if (arrayWord.size() <= 1) {
+            return true;
+        } else if (!cc.equalChars((char) arrayWord.removeFirst(), (char) arrayWord.removeLast())) {
+            return false;
+        } else {
+            return isPalindrome(arrayWord, cc);
+        }
+
+    }
 }
