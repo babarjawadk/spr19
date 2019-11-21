@@ -43,8 +43,6 @@ public class ArrayDequeTest {
 
         lld1.addFirst("front");
 
-        // The && operator is the same as "and" in Python.
-        // It's a binary operator that returns true if both arguments true, and false otherwise.
         passed = checkSize(1, lld1.size()) && passed;
         passed = checkEmpty(false, lld1.isEmpty()) && passed;
 
@@ -69,15 +67,15 @@ public class ArrayDequeTest {
         System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
         ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
-        // should be empty
+
         boolean passed = checkEmpty(true, lld1.isEmpty());
 
         lld1.addFirst(10);
-        // should not be empty
+
         passed = checkEmpty(false, lld1.isEmpty()) && passed;
 
         lld1.removeFirst();
-        // should be empty
+
         passed = checkEmpty(true, lld1.isEmpty()) && passed;
 
         printTestStatus(passed);
@@ -89,82 +87,5 @@ public class ArrayDequeTest {
         System.out.println("Running tests.\n");
         addIsEmptySizeTest();
         addRemoveTest();
-
-        ArrayDeque<Integer> someArray = new ArrayDeque<>();
-
-        someArray.addFirst(1);
-        someArray.addFirst(2);
-        someArray.addFirst(3);
-        someArray.addFirst(4);
-        someArray.addFirst(5);
-        someArray.addFirst(6);
-        someArray.addFirst(7);
-        someArray.addLast(8);
-        someArray.addFirst(9);
-        someArray.addLast(10);
-        someArray.addFirst(16);
-        someArray.addLast(17);
-        someArray.addLast(18);
-        someArray.addFirst(19);
-        someArray.addLast(20);
-        someArray.addLast(21);
-        someArray.addFirst(22);
-        someArray.addLast(23);
-        someArray.addFirst(24);
-        someArray.addLast(25);
-        someArray.addLast(26);
-        System.out.println(someArray.size());
-        someArray.removeLast();
-        someArray.removeLast();
-        someArray.removeFirst();
-        someArray.addLast(55);
-        someArray.addFirst(19);
-        someArray.addFirst(20);
-        someArray.addFirst(21);
-        someArray.addFirst(22);
-        someArray.addFirst(24);
-        someArray.addFirst(25);
-        System.out.println("get:");
-        System.out.println(someArray.get(4));
-
-        someArray.removeLast();
-        someArray.removeLast();
-
-
-
-
-
-
-        System.out.println(someArray.size());
-        someArray.printDeque();
-
-        ArrayDeque<Integer> copy = new ArrayDeque<>(someArray);
-
-        someArray.printDeque();
-        copy.printDeque();
-
-        System.out.println("get: ");
-        for (int i = 0; i < copy.size(); i+= 1) {
-
-            System.out.print(copy.get(i));
-            System.out.print(" ");
-        }
-        System.out.println();
-
-        //null 25 24 22 21 20 19 19 16 9 7 6 5 4 3 2 1 8 10 17 18 20 21
-
-        //25 24 22 21 20 19 22 19 16 9 7 6 5 4 3 2 1 8 10 17 18 20 21
-
-        //25 24 22 21 20 19 19 16 9 7 6 5 4 3 2 1 8 10 17 18 20 21 null
-
-        ArrayDeque<Integer> downSizeArray = new ArrayDeque<>();
-        for (int i = 0; i < 1024; i += 1) {
-            downSizeArray.addFirst(i);
-        }
-        for (int i = 0; i < 1020; i += 1) {
-            downSizeArray.removeLast();
-        }
-        System.out.println(downSizeArray);
-
     }
-} 
+}
