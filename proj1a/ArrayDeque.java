@@ -1,14 +1,28 @@
+/** Array based Deque (usually pronounced like “deck”)
+ * is an irregular acronym of double-ended queue.
+ * Double-ended queues are sequence containers with dynamic sizes
+ * that can be expanded or contracted on both ends
+ * (either its front or its back).
+ * @author Jawad
+ */
 public class ArrayDeque<T> {
+    /** Array containing the elements of the Deque. */
     private T[] items;
+    /** Number of items currently in the ArrayDeque. */
     private int size;
+    /** Length of the Array. */
     private int length;
+    /** Size/Length. */
     private double capacity;
+    /** Index of the next element to be inserted in the front. */
     private int nextFirst;
+    /** Index of the next element to be inserted in the back. */
     private int nextLast;
 
-    private final int RFACTOR = 2;
+    /** Used when resizing the Array. */
+    private final int rFactor = 2;
 
-    /** Creates an empty list. */
+    /** Creates an empty ArrayDeque. */
     public ArrayDeque() {
         items = (T[]) new Object[8];
         length = items.length;
@@ -16,7 +30,9 @@ public class ArrayDeque<T> {
         nextFirst = 0;
         nextLast = 1;
     }
-/*
+
+    /** Creates a copy of an existing ArrayDeque. */
+    /*
     public ArrayDeque(ArrayDeque other) {
         items = (T[]) new Object[other.length];
         length = other.length;
@@ -26,11 +42,16 @@ public class ArrayDeque<T> {
         capacity = other.capacity;
         System.arraycopy(other.items, 0, items, 0, length);
     }
-*/
+    */
+
+    /** Returns a boolean that checks if the LinkedListDeque is empty.*/
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /** Helper function that returns the previous index.
+     * @param index index of ArrayDeque
+     */
     private int minusOne(int index) {
         if (index == 0) {
             return length - 1;
@@ -38,36 +59,39 @@ public class ArrayDeque<T> {
         return index - 1;
     }
 
+    /** Helper function that returns the next index.
+     * @param index index of ArrayDeque
+     */
     private int plusOne(int index) {
         if (index == length - 1) {
             return 0;
         }
-        return index += 1;
+        return index + 1;
     }
 
-    private void resize(int capacity) {
-        T[] tmp = (T[]) new Object[capacity];
-
+    /** Resizes the ArrayDeque.
+     * @param newLength new capacity of the ArrayDeque
+     */
+    private void resize(int newLength) {
+        T[] tmp = (T[]) new Object[newLength];
         if (plusOne(nextFirst) == 0 || plusOne(nextFirst) + size < length) {
             System.arraycopy(items, plusOne(nextFirst), tmp, 0, size);
-        }
-        else {
+        } else {
             System.arraycopy(items, plusOne(nextFirst), tmp, 0, length - plusOne(nextFirst));
-            //System.arraycopy(items, 0, tmp, length - plusOne(nextFirst), size - (length - plusOne(nextFirst)));
             System.arraycopy(items, 0, tmp, length - plusOne(nextFirst), nextLast);
         }
-
-
-        nextFirst = capacity - 1;
+        nextFirst = newLength - 1;
         nextLast = size;
         items = tmp;
         length = items.length;
     }
 
-
+    /** Destructive method that adds an element to the front of the list.
+     * @param item value of type T to be added
+     */
     public void addFirst(T item) {
         if (size == length) {
-            resize(size * RFACTOR);
+            resize(size * rFactor);
         }
         items[nextFirst] = item;
         nextFirst = minusOne(nextFirst);
@@ -75,9 +99,12 @@ public class ArrayDeque<T> {
         capacityUpdate(size, length);
     }
 
+    /** Destructive method that adds an element to the back of the list.
+     * @param item value of type T to be added
+     */
     public void addLast(T item) {
         if (size == length) {
-            resize(size * RFACTOR);
+            resize(size * rFactor);
         }
         items[nextLast] = item;
         nextLast = plusOne(nextLast);
@@ -85,10 +112,12 @@ public class ArrayDeque<T> {
         capacityUpdate(size, length);
     }
 
+    /** Returns the size of the ArrayDeque. */
     public int size() {
         return size;
     }
 
+    /** Prints the LinkedListDeque. */
     public void printDeque() {
         for (int i = plusOne(nextFirst); items[i] != null; i = plusOne(i)) {
             System.out.print(items[i]);
@@ -97,21 +126,21 @@ public class ArrayDeque<T> {
         System.out.println();
     }
 
+    /** Updates the capacity of the ArrayDeque.
+     * @param s current size of the ArrayDeque
+     * @param l current length of the ArrayDeque
+     */
     private void capacityUpdate(double s, double l) {
-        capacity = s/l;
+        capacity = s / l;
     }
 
+    /** Removes and returns the first item of the ArrayDeque. */
     public T removeFirst() {
         if (size == 0) {
             return null;
+        } else if (length >= 16 && capacity < 0.25) {
+            resize(length / rFactor);
         }
-
-
-
-        if (length >= 16 && capacity < 0.25) {
-            resize(length / RFACTOR);
-        }
-
         nextFirst = plusOne(nextFirst);
         size -= 1;
         T item = items[nextFirst];
@@ -120,17 +149,13 @@ public class ArrayDeque<T> {
         return item;
     }
 
+    /** Removes and returns the last item of the ArrayDeque. */
     public T removeLast() {
         if (size == 0) {
             return null;
+        } else if (length >= 16 && capacity < 0.25) {
+            resize(length / rFactor);
         }
-
-
-
-        if (length >= 16 && capacity < 0.25) {
-            resize(length / RFACTOR);
-        }
-
         nextLast = minusOne(nextLast);
         size -= 1;
         T item = items[nextLast];
@@ -139,6 +164,9 @@ public class ArrayDeque<T> {
         return item;
     }
 
+    /** Returns the ith item of the ArrayDeque.
+     * @param index ith item to be returned
+     */
     public T get(int index) {
         if (index >= size) {
             return null;
