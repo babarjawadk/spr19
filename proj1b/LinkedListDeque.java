@@ -66,6 +66,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /** Destructive method that adds an element to the front of the list.
      * @param item value of type T to be added
      */
+    @Override
     public void addFirst(T item) {
         TNode newNode = new TNode(item, sentinel.next, sentinel);
         sentinel.next.prev = newNode;
@@ -76,6 +77,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /** Destructive method that adds an element to the back of the list.
      * @param item value of type T to be added
      */
+    @Override
     public void addLast(T item) {
         TNode newNode = new TNode(item, sentinel, sentinel.prev);
         sentinel.prev.next = newNode;
@@ -83,17 +85,16 @@ public class LinkedListDeque<T> implements Deque<T> {
         size += 1;
     }
 
-    /** Returns a boolean that checks if the LinkedListDeque is empty.*/
-    public boolean isEmpty() {
-        return size == 0;
-    }
+
 
     /** Returns the size of the LinkedListDeque. */
+    @Override
     public int size() {
         return size;
     }
 
     /** Prints the LinkedListDeque. */
+    @Override
     public void printDeque() {
         TNode p = sentinel.next;
         for (int i = 0; i < size; i++) {
@@ -105,6 +106,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     /** Removes and returns the first item/node of the LinkedListDeque. */
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -117,6 +119,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     /** Removes and returns the last item/node of the LinkedListDeque. */
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -131,6 +134,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     /** Returns the ith item of the LinkedListDeque.
      * @param index ith item to be returned
      */
+    @Override
     public T get(int index) {
         if (index >= size) {
             return null;

@@ -1,5 +1,5 @@
 public interface Deque<T> {
-    private int size;
+
 
     public void addFirst(T item);
     public void addLast(T item);
@@ -11,8 +11,8 @@ public interface Deque<T> {
     public T get(int index);
 
 
-    public boolean isEmpty() {
-        return size == 0;
+    default public boolean isEmpty() {
+        return size() == 0;
     }
 
 }

@@ -44,10 +44,7 @@ public class ArrayDeque<T> implements Deque<T> {
         System.arraycopy(other.items, 0, items, 0, length);
     }
 
-    /** Returns a boolean that checks if the LinkedListDeque is empty.*/
-    public boolean isEmpty() {
-        return size == 0;
-    }
+
 
     /** Helper function that returns the previous index.
      * @param index index of ArrayDeque
@@ -89,6 +86,7 @@ public class ArrayDeque<T> implements Deque<T> {
     /** Destructive method that adds an element to the front of the list.
      * @param item value of type T to be added
      */
+    @Override
     public void addFirst(T item) {
         if (size == length) {
             resize(size * rFactor);
@@ -102,6 +100,7 @@ public class ArrayDeque<T> implements Deque<T> {
     /** Destructive method that adds an element to the back of the list.
      * @param item value of type T to be added
      */
+    @Override
     public void addLast(T item) {
         if (size == length) {
             resize(size * rFactor);
@@ -113,11 +112,13 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
     /** Returns the size of the ArrayDeque. */
+    @Override
     public int size() {
         return size;
     }
 
     /** Prints the LinkedListDeque. */
+    @Override
     public void printDeque() {
         for (int i = plusOne(nextFirst); items[i] != null; i = plusOne(i)) {
             System.out.print(items[i]);
@@ -135,6 +136,7 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
     /** Removes and returns the first item of the ArrayDeque. */
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -150,6 +152,7 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
     /** Removes and returns the last item of the ArrayDeque. */
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -167,6 +170,7 @@ public class ArrayDeque<T> implements Deque<T> {
     /** Returns the ith item of the ArrayDeque.
      * @param index ith item to be returned
      */
+    @Override
     public T get(int index) {
         if (index >= size) {
             return null;
