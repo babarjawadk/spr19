@@ -31,8 +31,9 @@ public class ArrayDeque<T> {
         nextLast = 1;
     }
 
-    /** Creates a copy of an existing ArrayDeque. */
-    /*
+    /** Constructs a ArrayDeque from an existing one.
+     * @param other original LinkedListDeque to be copied
+     */
     public ArrayDeque(ArrayDeque other) {
         items = (T[]) new Object[other.length];
         length = other.length;
@@ -42,7 +43,6 @@ public class ArrayDeque<T> {
         capacity = other.capacity;
         System.arraycopy(other.items, 0, items, 0, length);
     }
-    */
 
     /** Returns a boolean that checks if the LinkedListDeque is empty.*/
     public boolean isEmpty() {

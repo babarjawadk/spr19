@@ -47,8 +47,9 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-    /** Constructs a LinkedListDeque from an existing one. */
-    /*
+    /** Constructs a LinkedListDeque from an existing one.
+     * @param other original LinkedListDeque to be copied
+     */
     public LinkedListDeque(LinkedListDeque other) {
         sentinel = new TNode();
         sentinel.next = sentinel;
@@ -56,13 +57,11 @@ public class LinkedListDeque<T> {
         size = 0;
 
         TNode p = other.sentinel.next;
-        for(int i = 0; i < other.size(); i += 1) {
-            addLast((T) p.item); // cast
-
+        for (int i = 0; i < other.size(); i += 1) {
+            addLast((T) p.item);
             p = p.next;
         }
     }
-    */
 
     /** Destructive method that adds an element to the front of the list.
      * @param item value of type T to be added
