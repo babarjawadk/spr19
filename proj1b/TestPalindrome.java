@@ -2,10 +2,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TestPalindrome {
-    // You must use this palindrome, and not instantiate
-    // new Palindromes, or the autograder might be upset.
     static Palindrome palindrome = new Palindrome();
-
     static CharacterComparator offByOne = new OffByOne();
 
     @Test
@@ -31,13 +28,8 @@ public class TestPalindrome {
 
     @Test
     public void testOffByOnePalindrome() {
-
-
         assertTrue(palindrome.isPalindrome("z", offByOne));
         assertTrue(palindrome.isPalindrome("flake", offByOne));
-
         assertFalse(palindrome.isPalindrome("racecar", offByOne));
-
-
     }
 }
