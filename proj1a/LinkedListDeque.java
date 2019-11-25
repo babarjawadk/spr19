@@ -54,7 +54,7 @@ public class LinkedListDeque<T> {
         sentinel = new TNode();
         sentinel.next = sentinel;
         sentinel.prev = sentinel;
-        size = 0;
+        size = other.size();
 
         TNode p = other.sentinel.next;
         for (int i = 0; i < other.size(); i += 1) {
