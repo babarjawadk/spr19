@@ -12,7 +12,6 @@ public class TestArrayDequeGold {
         for (int i = 0; i < 1000; i++) {
             int r = StdRandom.uniform(40);
 
-            //assertEquals(sad.size(), ads.size());
             if (ads.size() == 0 && r < 20) {
                 r = 25;
             }
@@ -22,7 +21,6 @@ public class TestArrayDequeGold {
                 Integer expected = sad.removeFirst();
                 Integer actual = ads.removeFirst();
                 assertEquals(message, expected, actual);
-
             } else if (r >= 10 && r < 20) {
                 message += "removeLast()\n";
                 Integer expected = sad.removeLast();
@@ -32,28 +30,11 @@ public class TestArrayDequeGold {
                 message += "addFirst(" + i + ")\n";
                 sad.addFirst(i);
                 ads.addFirst(i);
-
-                /*Integer expected = sad.get(0);
-                Integer actual = ads.get(0);
-                assertEquals(expected, actual);*/
             } else if (r >= 30 && r < 40) {
                 message += "addLast(" + i + ")\n";
                 sad.addLast(i);
                 ads.addLast(i);
-                /*assertEquals(sad.size(), ads.size());
-                Integer expected = sad.get(sad.size() - 1);
-                Integer actual = ads.get(ads.size() - 1);
-                assertEquals(expected, actual);*/
             }
-
-
         }
-
-
-
-
-
-
-
     }
 }
