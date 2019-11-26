@@ -12,12 +12,13 @@ import java.util.Map;
 
 import static huglife.HugLifeUtils.randomEntry;
 
+
 /**
- * An implementation of a motile pacifist photosynthesizer.
- *
- * @author Josh Hug
+ * An implementation the Clorus, a fierce blue-colored predator
+ * that enjoys nothing more than snacking on hapless Plips.
+ * @author Jawad
  */
-public class Plip extends Creature {
+public class Clorus extends Creature {
 
     /**
      * red color.
@@ -33,71 +34,63 @@ public class Plip extends Creature {
     private int b;
 
     /**
-     * creates plip with energy equal to E.
+     * creates clorus with energy equal to E.
      */
-    public Plip(double e) {
-        super("plip");
-        r = 0;
+    public Clorus(double e) {
+        super("clorus");
+        r = 34;
         g = 0;
-        b = 0;
-        energy = Math.max(e, 0);
-        energy = Math.min(energy, 2);
+        b = 231;
+        energy = e;
     }
 
     /**
-     * creates a plip with energy equal to 1.
+     * creates a clorus with energy equal to 1.
      */
-    public Plip() {
+    public Clorus() {
         this(1);
     }
 
     /**
-     * Should return a color with red = 99, blue = 76, and green that varies
-     * linearly based on the energy of the Plip. If the plip has zero energy,
-     * it should have a green value of 63. If it has max energy, it should
-     * have a green value of 255. The green value should vary with energy
-     * linearly in between these two extremes. It's not absolutely vital
-     * that you get this exactly correct.
+     * Should return a color with red = 34, green = 0 and blue = 231.
      */
     public Color color() {
-        r = 99;
-        b = 76;
-        g = 96 * (int) energy + 63;
         return color(r, g, b);
     }
 
     /**
-     * Do nothing with C, Plips are pacifists.
+     * If a Clorus attacks another creature,
+     * it should gain that creature’s energy.
      */
     public void attack(Creature c) {
-        // do nothing.
+        energy += c.energy();
     }
 
     /**
-     * Plips should lose 0.15 units of energy when moving. If you want to
+     * Clorus should lose 0.03 units of energy when moving. If you want to
      * to avoid the magic number warning, you'll need to make a
      * private static final variable. This is not required for this lab.
      */
     public void move() {
-        energy = Math.max(energy - 0.15, 0);
+        energy -= 0.03;
     }
 
 
     /**
-     * Plips gain 0.2 energy when staying due to photosynthesis.
+     * Clorus should loose 0.01 energy when staying.
      */
     public void stay() {
-        energy = Math.min(energy + 0.2, 2);
+        energy -= 0.01;
     }
 
     /**
-     * Plips and their offspring each get 50% of the energy, with none
+     * Clorus and their offspring each get 50% of the energy, with none
      * lost to the process. Now that's efficiency! Returns a baby
-     * Plip.
+     * Clorus.
      */
-    public Plip replicate() {
+    public Clorus replicate() {
         energy *= 0.5;
-        Plip that = new Plip(energy);
+        Clorus that = new Clorus(energy);
         return that;
     }
 
@@ -117,7 +110,8 @@ public class Plip extends Creature {
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
         // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
-        boolean anyClorus = false;
+        Deque<Direction> plipNeighbors = new ArrayDeque<>();
+        boolean anyPlip = false;
         boolean anyEmpty = false;
 
         for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet()) {
@@ -126,8 +120,9 @@ public class Plip extends Creature {
             if (occ.name().equals("empty")) {
                 anyEmpty = true;
                 emptyNeighbors.addLast(dir);
-            } else if (occ.name().equals("clorus")) {
-                anyClorus = true;
+            } else if (occ.name().equals("plip")) {
+                anyPlip = true;
+                plipNeighbors.addLast(dir);
             }
         }
 
@@ -136,16 +131,19 @@ public class Plip extends Creature {
         }
 
         // Rule 2
+        if (anyPlip) {
+            Direction plipDirection = randomEntry(plipNeighbors);
+            Plip plipAttacked = (Plip) neighbors.get(plipDirection);
+            this.attack(plipAttacked);
+            return new Action(Action.ActionType.ATTACK, plipDirection);
+        }
+
+        // Rule 3
         if (energy >= 1.00) {
             return new Action(Action.ActionType.REPLICATE, randomEntry(emptyNeighbors));
         }
 
-        // Rule 3
-        if (anyClorus == true && Math.random() < 0.5) {
-            return new Action(Action.ActionType.MOVE, randomEntry(emptyNeighbors));
-        }
-
         // Rule 4
-        return new Action(Action.ActionType.STAY);
+        return new Action(Action.ActionType.MOVE, randomEntry(emptyNeighbors));
     }
 }

@@ -10,9 +10,8 @@ import huglife.Impassible;
 import huglife.Empty;
 
 /** Tests the plip class
- *  @authr FIXME
+ *  @authr Jawad
  */
-
 public class TestPlip {
 
     @Test
@@ -28,14 +27,22 @@ public class TestPlip {
         assertEquals(1.90, p.energy(), 0.01);
         p.stay();
         assertEquals(2.00, p.energy(), 0.01);
+        p.stay();
+        assertEquals(2.00, p.energy(), 0.01);
+        p.stay();
+        assertEquals(2.00, p.energy(), 0.01);
     }
 
     @Test
     public void testReplicate() {
-        // TODO
+        Plip firstPlip = new Plip(2);
+        Plip secondPlip = firstPlip.replicate();
+        firstPlip.move();
+        assertEquals(0.85, firstPlip.energy(), 0.01);
+        assertEquals(1, secondPlip.energy(), 0.01);
     }
 
-    //@Test
+    @Test
     public void testChoose() {
 
         // No empty adjacent spaces; stay.
