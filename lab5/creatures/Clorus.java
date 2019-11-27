@@ -95,17 +95,13 @@ public class Clorus extends Creature {
     }
 
     /**
-     * Plips take exactly the following actions based on NEIGHBORS:
-     * 1. If no empty adjacent spaces, STAY.
-     * 2. Otherwise, if energy >= 1, REPLICATE towards an empty direction
-     * chosen at random.
-     * 3. Otherwise, if any Cloruses, MOVE with 50% probability,
-     * towards an empty direction chosen at random.
-     * 4. Otherwise, if nothing else, STAY
-     * <p>
-     * Returns an object of type Action. See Action.java for the
-     * scoop on how Actions work. See SampleCreature.chooseAction()
-     * for an example to follow.
+     * Cloruses should obey exactly the following behavioral rules:
+     * If there are no empty squares, the Clorus will STAY (even if there are Plips
+     * nearby they could attack since plip squares do not count as empty squares).
+     * Otherwise, if any Plips are seen, the Clorus will ATTACK one of them randomly.
+     * Otherwise, if the Clorus has energy greater than or equal to one,
+     * it will REPLICATE to a random empty square.
+     * Otherwise, the Clorus will MOVE to a random empty square.
      */
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
         // Rule 1
