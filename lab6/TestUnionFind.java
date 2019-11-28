@@ -25,6 +25,13 @@ public class TestUnionFind {
         ds.union(3, 9);
         ds.union(1, 9);
 
+        boolean i = ds.connected(3, 9);
+
+        ds.find(1);
+        ds.find(3);
+
+        boolean g = ds.connected(2, 3);
+        boolean h = ds.connected(3, 9);
     }
 
 }

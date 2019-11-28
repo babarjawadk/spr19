@@ -1,21 +1,21 @@
 public class UnionFind {
 
     private int[] parent;
-    private int maxLength;
+
 
     /* Creates a UnionFind data structure holding n vertices. Initially, all
        vertices are in disjoint sets. */
     public UnionFind(int n) {
-        maxLength = n;
-        parent = new int[maxLength];
-        for (int i = 0; i < maxLength; i++) {
+
+        parent = new int[n];
+        for (int i = 0; i < n; i++) {
             parent[i] = -1;
         }
     }
 
     /* Throws an exception if v1 is not a valid index. */
     private void validate(int vertex) {
-        if (vertex >= maxLength) {
+        if (vertex >= parent.length || vertex < 0) {
             throw new ArrayIndexOutOfBoundsException("vertex given too high");
         }
     }
