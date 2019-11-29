@@ -51,6 +51,10 @@ public class UnionFind {
         int v1Root = find(v1);
         int v2Root = find(v2);
 
+        if (v1Root == v2Root) {
+            return;
+        }
+
         if (v1Size > v2Size) {
             parent[v2Root] = v1Root;
             parent[v1Root] = - v1Size - v2Size;

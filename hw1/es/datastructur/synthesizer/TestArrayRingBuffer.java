@@ -31,28 +31,47 @@ public class TestArrayRingBuffer {
 
     @Test
     public void testIterator() {
-        ArrayRingBuffer arb = new ArrayRingBuffer(10);
+        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer<>(10);
 
         for (int i = 0; i < 10; i++) {
             arb.enqueue(i);
         }
 
-        Iterator<Integer> seer1 = arb.iterator();
-        Iterator<Integer> seer2 = arb.iterator();
+        Iterator<Integer> seer = arb.iterator();
 
         int expected1 = 0;
-        while (seer1.hasNext()) {
-            assertEquals(expected1, (int) seer1.next());
+        while (seer.hasNext()) {
+            assertEquals(expected1, (int) seer.next());
             expected1++;
         }
 
-
         int expected2 = 0;
-        for (int i : seer2) {
+        for (int i : arb) {
             assertEquals(expected2, i);
             expected2++;
         }
+    }
 
+    @Test
+    public void testEquals() {
+        ArrayRingBuffer<Integer> arb1 = new ArrayRingBuffer<>(10);
 
+        for (int i = 3; i < 10; i++) {
+            arb1.enqueue(i);
+        }
+
+        ArrayRingBuffer<Integer> arb2 = new ArrayRingBuffer<>(10);
+        for (int i = 0; i < 10; i++) {
+            arb2.enqueue(i);
+        }
+        arb2.dequeue();
+        arb2.dequeue();
+        arb2.dequeue();
+
+        assertTrue(arb1.equals(arb2));
+
+        arb1.dequeue();
+
+        assertFalse(arb1.equals(arb2));
     }
 }
