@@ -33,7 +33,7 @@ public class Percolation {
     // open the site (row, col) if it is not open already
     public void open(int row, int col) {
         if (row >= size || col >= size || row < 0 || col < 0) {
-            throw new IllegalArgumentException("index out of bound");
+            throw new IndexOutOfBoundsException("index out of bound");
         }
         if (isOpen(row, col)) {
             return;
@@ -55,7 +55,8 @@ public class Percolation {
 
         if (row == 0) {
             qu.union(top, rowCol);
-        } else if ((row == (size - 1)) && !percolates()) {
+        }
+        if ((row == (size - 1)) && !percolates()) {
             qu.union(bottom, rowCol);
         }
 
@@ -87,7 +88,7 @@ public class Percolation {
 
     // use for unit testing (not required, but keep this here for the autograder)
     public static void main(String[] args) {
-
+        /*
         Percolation testPerc = new Percolation(4);
         boolean testBool = false;
 
@@ -101,5 +102,11 @@ public class Percolation {
         testBool = testPerc.percolates();
         testPerc.open(3, 1);
         testBool = testPerc.percolates();
+        */
+        Percolation testB = new Percolation(1);
+        testB.open(0, 0);
+        boolean b = testB.percolates();
+
+
     }
 }
