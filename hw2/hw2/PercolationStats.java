@@ -3,13 +3,22 @@ package hw2;
 import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-
+/**
+ * Monte Carlo simulation. Performs T independent experiments on an N-by-N grid.
+ * @author jawad
+ */
 public class PercolationStats {
-    // perform T independent experiments on an N-by-N grid
-
+    /** Array containing thresholds for all T experiments. */
     private final double[] thresholds;
+    /** Total number of experiments. */
     private final double numberOfExperiments;
 
+    /**
+     * Constructor conducting all experiments.
+     * @param N size of a single grid
+     * @param T number of experiments
+     * @param pf for autograder
+     */
     public PercolationStats(int N, int T, PercolationFactory pf) {
         if (N <= 0 || T <= 0) {
             throw new IllegalArgumentException();
@@ -36,22 +45,30 @@ public class PercolationStats {
         }
     }
 
-    // sample mean of percolation threshold
+    /**
+     * Returns the mean of all thresholds.
+     */
     public double mean() {
         return StdStats.mean(thresholds);
     }
 
-    // sample standard deviation of percolation threshold
+    /**
+     * Returns the standard deviation of all thresholds.
+     */
     public double stddev() {
         return StdStats.stddev(thresholds);
     }
 
-    // low endpoint of 95% confidence interval
+    /**
+     * Returns the low endpoint of 95% confidence interval.
+     */
     public double confidenceLow() {
         return mean() - 1.96 * stddev() / Math.sqrt(numberOfExperiments);
     }
 
-    // high endpoint of 95% confidence interval
+    /**
+     * Returns the high endpoint of 95% confidence interval.
+     */
     public double confidenceHigh() {
         return mean() + 1.96 * stddev() / Math.sqrt(numberOfExperiments);
     }

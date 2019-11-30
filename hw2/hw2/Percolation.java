@@ -2,7 +2,6 @@ package hw2;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-
 /**
  * Percolation class with constructor and couple of methods.
  * @author jawad
