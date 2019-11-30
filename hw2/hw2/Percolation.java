@@ -11,7 +11,8 @@ public class Percolation {
     private final int top;
     private final int bottom;
     private int[][] grid;
-    private WeightedQuickUnionUF qu;
+    private WeightedQuickUnionUF quPercol;
+    private WeightedQuickUnionUF quIsFull;
 
     private int xyTo1D(int r, int c) {
         return r * size + c;
@@ -27,7 +28,8 @@ public class Percolation {
         bottom = size * size + 1;
         opened = 0;
         grid = new int[N][N];
-        qu = new WeightedQuickUnionUF(xyTo1D(size, size) + 2);
+        quPercol = new WeightedQuickUnionUF(size * size + 2);
+        quIsFull = new WeightedQuickUnionUF(size * size + 1);
     }
 
     // open the site (row, col) if it is not open already
@@ -48,16 +50,29 @@ public class Percolation {
         int prevRow = Math.max(0, row - 1);
         int nextRow = Math.min(size - 1, row + 1);
 
-        if (isOpen(row, prevCol)) { qu.union(xyTo1D(row, prevCol), rowCol); }
-        if (isOpen(row, nextCol)) { qu.union(xyTo1D(row, nextCol), rowCol); }
-        if (isOpen(prevRow, col)) { qu.union(xyTo1D(prevRow, col), rowCol); }
-        if (isOpen(nextRow, col)) { qu.union(xyTo1D(nextRow, col), rowCol); }
+        if (isOpen(row, prevCol)) {
+            quPercol.union(xyTo1D(row, prevCol), rowCol);
+            quIsFull.union(xyTo1D(row, prevCol), rowCol);
+        }
+        if (isOpen(row, nextCol)) {
+            quPercol.union(xyTo1D(row, nextCol), rowCol);
+            quIsFull.union(xyTo1D(row, nextCol), rowCol);
+        }
+        if (isOpen(prevRow, col)) {
+            quPercol.union(xyTo1D(prevRow, col), rowCol);
+            quIsFull.union(xyTo1D(prevRow, col), rowCol);
+        }
+        if (isOpen(nextRow, col)) {
+            quPercol.union(xyTo1D(nextRow, col), rowCol);
+            quIsFull.union(xyTo1D(nextRow, col), rowCol);
+        }
 
         if (row == 0) {
-            qu.union(top, rowCol);
+            quPercol.union(top, rowCol);
+            quIsFull.union(top, rowCol);
         }
         if ((row == (size - 1)) && !percolates()) {
-            qu.union(bottom, rowCol);
+            quPercol.union(bottom, rowCol);
         }
 
     }
@@ -65,7 +80,7 @@ public class Percolation {
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
         if (row >= size || col >= size || row < 0 || col < 0) {
-            throw new IllegalArgumentException("index out of bound");
+            throw new IndexOutOfBoundsException("index out of bound");
         }
         return grid[row][col] == 1;
     }
@@ -73,7 +88,7 @@ public class Percolation {
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         //return opened == xyTo1D(size, size);
-        return qu.connected(xyTo1D(row, col), top);
+        return quIsFull.connected(xyTo1D(row, col), top);
     }
 
     // number of open sites
@@ -83,12 +98,12 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return qu.connected(top, bottom);
+        return quPercol.connected(top, bottom);
     }
 
     // use for unit testing (not required, but keep this here for the autograder)
     public static void main(String[] args) {
-        /*
+
         Percolation testPerc = new Percolation(4);
         boolean testBool = false;
 
@@ -102,7 +117,7 @@ public class Percolation {
         testBool = testPerc.percolates();
         testPerc.open(3, 1);
         testBool = testPerc.percolates();
-        */
+
         Percolation testB = new Percolation(1);
         testB.open(0, 0);
         boolean b = testB.percolates();
