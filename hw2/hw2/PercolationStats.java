@@ -55,11 +55,4 @@ public class PercolationStats {
     public double confidenceHigh() {
         return mean() + 1.96 * stddev() / Math.sqrt(numberOfExperiments);
     }
-
-
-    /*public static void main(String[] args) {
-        PercolationFactory pf = new PercolationFactory();
-        PercolationStats testStats = new PercolationStats(50, 100, pf);
-        double a = testStats.mean();
-    }*/
 }
