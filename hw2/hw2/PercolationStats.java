@@ -24,6 +24,10 @@ public class PercolationStats {
             for (int n = 0; (n < N * N) && !p.percolates(); n++) {
                 int row = StdRandom.uniform(N);
                 int col = StdRandom.uniform(N);
+                while (p.isOpen(row, col)) {
+                    row = StdRandom.uniform(N);
+                    col = StdRandom.uniform(N);
+                }
                 p.open(row, col);
             }
             double openedSites = p.numberOfOpenSites();
