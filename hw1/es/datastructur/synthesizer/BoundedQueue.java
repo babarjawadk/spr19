@@ -1,4 +1,4 @@
-package synthesizer;
+package es.datastructur.synthesizer;
 
 import java.util.Iterator;
 
