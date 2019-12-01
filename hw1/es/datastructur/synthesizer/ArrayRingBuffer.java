@@ -2,13 +2,13 @@ package es.datastructur.synthesizer;
 
 import java.util.Iterator;
 
-public class ArrayRingBuffer<T>  implements  BoundedQueue<T> {
+public class ArrayRingBuffer<T>  extends  AbstractBoundedQueue<T> {
     /* Index for the next dequeue or peek. */
     private int first;
     /* Index for the next enqueue. */
     private int last;
     /* Variable for the fillCount. */
-    private int fillCount;
+    //private int fillCount;
     /* Array for storing the buffer data. */
     private T[] rb;
 
@@ -39,7 +39,8 @@ public class ArrayRingBuffer<T>  implements  BoundedQueue<T> {
     /**
      * Create a new ArrayRingBuffer with the given capacity.
      */
-    public ArrayRingBuffer(int capacity) {
+    public ArrayRingBuffer(int n) {
+        capacity = n;
         rb = (T[]) new Object[capacity];
         first = 0;
         last = 0;
@@ -47,16 +48,16 @@ public class ArrayRingBuffer<T>  implements  BoundedQueue<T> {
     }
 
     // return size of the buffer
-    @Override
+    /*@Override
     public int capacity() {
         return rb.length;
-    }
+    }*/
 
     // return number of items currently in the buffer
-    @Override
+    /*@Override
     public int fillCount() {
         return fillCount;
-    }
+    }*/
 
     /**
      * Adds x to the end of the ring buffer. If there is no room, then
