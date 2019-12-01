@@ -1,4 +1,4 @@
-package es.datastructur.synthesizer;
+package synthesizer;
 
 public abstract class AbstractBoundedQueue<T> implements BoundedQueue<T> {
     protected int fillCount;

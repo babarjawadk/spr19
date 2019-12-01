@@ -1,4 +1,4 @@
-package es.datastructur.synthesizer;
+package synthesizer;
 
 /* Imports the required audio library from the
  * edu.princeton.cs.introcs package. */
