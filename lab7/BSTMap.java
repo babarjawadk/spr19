@@ -1,6 +1,4 @@
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
@@ -30,19 +28,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             return null;
         }
 
-        static BSTMap.Node insert(BSTMap n, K k, V v) {
-            if (n == null) {
-                return new BSTMap.Node(k, v, null, null);
-            }
-            if (k.compareTo(key) > 0 && right != null) {
-                return right.get(k);
-            }
-            if (k.compareTo(key) < 0 && left != null) {
-                return left.get(k);
-            }
-            return null;
-        }
-
         /** Stores the key of the key-value pair of this node in the list. */
         K key;
         /** Stores the value of the key-value pair of this node in the list. */
@@ -53,30 +38,23 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         BSTMap.Node right;
     }
 
-    private Node tree;
+    private Node head;
 
     int size = 0;
 
-    BSTMap(K k, V v) {
-        tree = new BSTMap.Node(k, v, null, null);
-        size = 1;
-    }
-
-    BSTMap() { }
-
     @Override
     public void clear() {
-        tree = null;
+        head = null;
         size = 0;
     }
 
     /* Returns true if this map contains a mapping for the specified key. */
     @Override
     public boolean containsKey(K key) {
-        if (tree == null) {
+        if (head == null) {
             return false;
         }
-        return tree.get(key) != null;
+        return head.get(key) != null;
     }
 
     /* Returns the value to which the specified key is mapped, or null if this
@@ -84,10 +62,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        if (tree == null) {
+        if (head == null) {
             return null;
         }
-        Node lookup = tree.get(key);
+        Node lookup = head.get(key);
         if (lookup == null) {
             return null;
         }
@@ -103,25 +81,24 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Associates the specified value with the specified key in this map. */
     @Override
     public void put(K key, V value) {
-
-        insert(tree, key, value);
+        head = insert(head, key, value);
         size += 1;
     }
 
-    private static BSTMap.Node insert(BSTMap t, K k, V v) {
-        if (t == null) {
-            return new BSTMap(k, v);
+    private BSTMap.Node insert(BSTMap.Node n, K k, V v) {
+        if (n == null) {
+            n = new BSTMap.Node(k, v, null, null);
         }
-        if (t.tree.key.equals(k)) {
-            t.tree.val = v;
+        if (n.key.equals(k)) {
+            n.val = v;
         }
-        if (t.tree.key.compareTo(k) > 0) {
-            t.tree.right = insert(t.tree.right, k, v);
+        if (n.key.compareTo(k) > 0) {
+            n.left = insert(n.left, k, v);
         }
-        if (t.tree.key.compareTo(k) < 0) {
-            t.tree.left = insert(t.tree.left, k, v);
+        if (n.key.compareTo(k) < 0) {
+            n.right = insert(n.right, k, v);
         }
-        return t;
+        return n;
     }
 
 
@@ -129,7 +106,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> set = new HashSet<>();
+        keySet(set, head);
+        return set;
+    }
+
+    private void keySet(Set set, BSTMap.Node node) {
+        if (node != null) {
+            keySet(set, node.left);
+            set.add(node.key);
+            keySet(set, node.right);
+        }
     }
 
     /* Removes the mapping for the specified key from this map if present.
@@ -150,7 +137,49 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     @Override
     public Iterator iterator() {
-        throw new UnsupportedOperationException();
+        return keySet().iterator();
+    }
+
+    public void printInOrder() {
+        printInOrder(head);
+    }
+
+    private void printInOrder(BSTMap.Node n) {
+        if (n == null) {
+            return;
+        }
+        printInOrder(n.left);
+        System.out.println("<" + n.key + ">, <" + n.val + ">");
+        printInOrder(n.right);
+    }
+
+
+
+
+    public static void main(String[] args) {
+        BSTMap<String, String> m = new BSTMap<>();
+        m.put("Paris", "France");
+        m.put("Amsterdam", "Netherlands");
+        m.put("Washington", "United States of America");
+        m.put("London", "United Kingdom");
+        m.put("Brussels", "Belgium");
+        m.put("Stockholm", "Sweden");
+        m.put("Dublin", "Ireland");
+        m.put("Islamabad", "Pakistan");
+        m.put("Moscow", "Russia");
+        m.put("Warsaw", "Poland");
+        m.put("Istanbul", "Turkey");
+        m.put("Madrid", "Spain");
+        m.put("Berlin", "Germany");
+        m.put("Sydney", "Australia");
+        m.put("Auckland", "New Zealand");
+
+        m.printInOrder();
+
+        for (String s : m) {
+            System.out.println(s);
+        }
+
     }
 
 }
