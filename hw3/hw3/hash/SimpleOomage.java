@@ -3,11 +3,19 @@ import java.awt.Color;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdDraw;
 
-
+/**
+ * A Simple Oomage has three properties: red, green, and blue,
+ * and each may have any value that is a multiple of 5 between 0 and 255.
+ * @author jawad
+ */
 public class SimpleOomage implements Oomage {
+    /** Red property of the class. */
     protected int red;
+    /** Green property of the class. */
     protected int green;
+    /** Blue property of the class. */
     protected int blue;
+
 
     private static final double WIDTH = 0.01;
     private static final boolean USE_PERFECT_HASH = true;
@@ -24,9 +32,6 @@ public class SimpleOomage implements Oomage {
         return true;
     }
 
-    /* Uncomment this method after you've written
-       equals and failed the testHashCodeAndEqualsConsistency
-       test.*/
     @Override
     public int hashCode() {
         if (!USE_PERFECT_HASH) {
