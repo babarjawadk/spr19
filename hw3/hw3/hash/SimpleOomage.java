@@ -22,9 +22,15 @@ public class SimpleOomage implements Oomage {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) { return false; }
-        if (this == o) { return true; }
-        if (this.getClass() != o.getClass()) { return false; }
+        if (o == null) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
         SimpleOomage other = (SimpleOomage) o;
         if (this.red != other.red || this.green != other.green || this.blue != other.blue) {
             return false;
