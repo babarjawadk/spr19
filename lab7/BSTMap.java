@@ -5,7 +5,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     private class Node {
 
         /** Stores KEY as the key in this key-value pair, VAL as the value, and
-         *  NEXT as the next node in the linked list. */
+         *  LEFT as the left sub-tree and RIGHT as the right sub-tree. */
         Node(K k, V v, BSTMap.Node l, BSTMap.Node r) {
             key = k;
             val = v;
@@ -13,8 +13,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             right = r;
         }
 
-        /** Returns the Entry in this linked list of key-value pairs whose key
-         *  is equal to KEY, or null if no such Entry exists. */
+        /** Returns the Node in this BST of key-value pairs whose key
+         *  is equal to KEY, or null if no such Node exists. */
         BSTMap.Node get(K k) {
             if (k != null && k.equals(key)) {
                 return this;
@@ -28,13 +28,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             return null;
         }
 
-        /** Stores the key of the key-value pair of this node in the list. */
+        /** Stores the key of the key-value pair of this node in the tree. */
         K key;
-        /** Stores the value of the key-value pair of this node in the list. */
+        /** Stores the value of the key-value pair of this node in the tree. */
         V val;
-        /** Stores the next Entry in the linked list. */
+        /** Stores the left sub-tree. */
         BSTMap.Node left;
-        /** Stores the next Entry in the linked list. */
+        /** Stores the right sub-tree. */
         BSTMap.Node right;
     }
 
