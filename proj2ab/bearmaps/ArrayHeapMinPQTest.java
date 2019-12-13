@@ -135,6 +135,7 @@ public class ArrayHeapMinPQTest {
         ArrayList<Integer> items = new ArrayList<>();
 
 
+
         for (int i = 0; i < 1000; i++) {
             int r = generateRandomInt(100);
 
@@ -184,7 +185,7 @@ public class ArrayHeapMinPQTest {
         return random.nextDouble();
     }
 
-    public int getRandomElement(List<Integer> list) {
+    private static int getRandomElement(List<Integer> list) {
         return list.get(generateRandomInt(list.size()));
     }
 

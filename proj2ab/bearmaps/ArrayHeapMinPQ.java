@@ -13,7 +13,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     private int heapLength;
 
     private PriorityNode[] heap;
-    private HashMap<T, Double> hashMap;
+    private HashMap<T, PriorityNode> hashMap;
 
 
     public ArrayHeapMinPQ() {
@@ -21,68 +21,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         heapLength = startHeapLength;
         heap = new ArrayHeapMinPQ.PriorityNode[heapLength];
         hashMap = new HashMap<>();
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public void add(T item, double priority) {
-        if (contains(item)) {
-            throw new IllegalArgumentException("Item already present in the Priority Queue!");
-        }
-        if (size == heapLength - 1) {
-            resize(heapLength * resizeFactor);
-        }
-
-        hashMap.put(item, priority);
-        size += 1;
-        heap[size] = new PriorityNode(item, priority);
-        swim(size);
-    }
-
-    @Override
-    public boolean contains(T item) {
-        return hashMap.containsKey(item);
-    }
-
-    @Override
-    public T getSmallest() {
-        if (size == 0) {
-            throw new NoSuchElementException("PQ is empty");
-        }
-        return heap[1].getItem();
-    }
-
-    @Override
-    public T removeSmallest() {
-        if (size == 0) {
-            throw new NoSuchElementException("PQ is empty");
-        }
-        if (size > 8 && size <= heapLength * resizeRatio) {
-            resize(heapLength / resizeFactor);
-        }
-        T smallestItem = heap[1].getItem();
-        hashMap.remove(smallestItem);
-        heap[1] = heap[size];
-        heap[size] = null;
-        size -= 1;
-        sink(1);
-        return smallestItem;
-    }
-
-    @Override
-    public void changePriority(T item, double priority) {
-        Double oldPriority = hashMap.replace(item, priority);
-        if (oldPriority == null) {
-            throw new NoSuchElementException("PQ does not contain " + item);
-        }
-        int i = find(1, new PriorityNode(item, oldPriority));
-        heap[i].setPriority(priority);
-        sink(i);
-        swim(i);
     }
 
     private void swim(int k) {
@@ -102,36 +40,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
     }
 
-
-
-    private boolean exists(int i) { return (i > 0 && i <= size); }
-
-    private int parent(int k) { return k / 2; }
-
-    private int leftChild(int k) { return k * 2; }
-
-    private int rightChild(int k) { return k * 2 + 1; }
-
     private void swap(int i, int j) {
         PriorityNode temp = heap[i];
         heap[i] = heap[j];
+        heap[i].setIndex(i);
         heap[j] = temp;
-    }
-
-    private int find(int i, PriorityNode p) {
-        int leftChild = leftChild(i);
-        int rightChild = rightChild(i);
-        if (heap[i].equals(p)) {
-            return i;
-        }
-        int j = 0;
-        if (exists(leftChild) && heap[leftChild].compareTo(p) <= 0) {
-            j = find(leftChild, p);
-        }
-        if (j == 0 && exists(rightChild) && heap[rightChild].compareTo(p) <= 0) {
-            j = find(rightChild, p);
-        }
-        return j;
+        heap[j].setIndex(j);
     }
 
     private boolean greater(int i, int j) {
@@ -145,13 +59,80 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         heap = newHeap;
     }
 
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void add(T item, double priority) {
+        if (contains(item)) {
+            throw new IllegalArgumentException("Item: " + item + " already in PQ!");
+        }
+        if (size == heapLength - 1) {
+            resize(heapLength * resizeFactor);
+        }
+        size += 1;
+        PriorityNode node = new PriorityNode(item, priority, size);
+        hashMap.put(item, node);
+
+        heap[size] = node;
+        swim(size);
+    }
+
+    @Override
+    public boolean contains(T item) {
+        return hashMap.containsKey(item);
+    }
+
+    @Override
+    public T getSmallest() {
+        if (size == 0) {
+            throw new NoSuchElementException("PQ is empty");
+        }
+        return heap[1].getItem();
+    }
+
+    @Override
+    public T removeSmallest() {
+        if (size == 0) {
+            throw new NoSuchElementException("PQ is empty!");
+        }
+        if (size > 8 && size <= heapLength * resizeRatio) {
+            resize(heapLength / resizeFactor);
+        }
+        T smallestItem = heap[1].getItem();
+        hashMap.remove(smallestItem);
+        heap[1] = heap[size];
+        heap[size] = null;
+        size -= 1;
+        sink(1);
+        return smallestItem;
+    }
+
+    @Override
+    public void changePriority(T item, double priority) {
+        PriorityNode node = hashMap.get(item);
+        if (node == null) {
+            throw new NoSuchElementException("PQ does not contain: " + item + "!");
+        }
+        node.setPriority(priority);
+        int i = node.getIndex();
+
+        swim(i);
+        sink(i);
+
+    }
+
     private class PriorityNode implements Comparable<PriorityNode> {
         private T item;
         private double priority;
+        private int index;
 
-        PriorityNode(T e, double p) {
+        PriorityNode(T e, double p, int i) {
             this.item = e;
             this.priority = p;
+            this.index = i;
         }
 
         T getItem() {
@@ -162,8 +143,16 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             return priority;
         }
 
+        int getIndex() {
+            return index;
+        }
+
         void setPriority(double priority) {
             this.priority = priority;
+        }
+
+        void setIndex(int i) {
+            this.index = i;
         }
 
         @Override
@@ -175,7 +164,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public boolean equals(Object o) {
             if (o == null || o.getClass() != this.getClass()) {
                 return false;
