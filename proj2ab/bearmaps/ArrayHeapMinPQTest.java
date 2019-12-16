@@ -136,7 +136,7 @@ public class ArrayHeapMinPQTest {
 
 
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
             int r = generateRandomInt(100);
 
             assertEquals(minPQ.size(), naivePQ.size());
