@@ -54,39 +54,37 @@ public class KDTree implements PointSet {
             node.left = insert(node.left, point, !xOrY);
         }
         return node;
-
-        /*if (xOrY) {
-            if (point.getX() >= node.point.getX()) {
-                node.right = insert(node.right, point, !xOrY);
-            } else {
-                node.left = insert(node.left, point, !xOrY);
-            }
-        } else if (!xOrY) {
-            if (point.getY() >= node.point.getY()) {
-                node.right = insert(node.right, point, !xOrY);
-            } else {
-                node.left = insert(node.left, point, !xOrY);
-            }
-        }
-        return node;*/
     }
 
-    private Node nearest(Node n, Point goal, Node best) {
+    private Node nearest(Node n, Point goal, Node best, Boolean xOrY) {
         if (n == null) {
             return best;
         }
         if (Point.distance(best.getPoint(), goal) > Point.distance(n.getPoint(), goal)) {
             best = n;
         }
-        best = nearest(n.left, goal, best);
-        best = nearest(n.right, goal, best);
+        Node goodSide;
+        Node badSide;
+        if (compare(n.getPoint(), goal, xOrY)) {
+            goodSide = n.left;
+            badSide = n.right;
+        } else {
+            goodSide = n.right;
+            badSide = n.left;
+        }
+        best = nearest(goodSide, goal, best, !xOrY);
+        Double diff;
+        if (xOrY) { diff = n.getPoint().getX() - goal.getX(); } else { diff = n.getPoint().getY() - goal.getY(); }
+        if (Point.distance(best.getPoint(), goal) > Math.pow(diff, 2)) {
+            best = nearest(badSide, goal, best, !xOrY);
+        }
         return best;
     }
 
     @Override
     public Point nearest(double x, double y) {
         Point goal = new Point(x, y);
-        Node minNode = nearest(root, goal, root);
+        Node minNode = nearest(root, goal, root, true);
         return minNode.getPoint();
     }
 

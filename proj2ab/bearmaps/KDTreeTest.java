@@ -11,6 +11,8 @@ import static org.junit.Assert.assertTrue;
 
 public class KDTreeTest {
 
+    private static Random random = new Random(26);
+
     @Test
     public void basicTest1() {
         Point p1 = new Point(1.1, 2.2);
@@ -35,11 +37,15 @@ public class KDTreeTest {
         Point p5 = new Point(5, 9);
 
         KDTree kdTree = new KDTree(List.of(p1, p2, p3, p4, p5));
-        Point nearestKDTree = kdTree.nearest(9, 3);
 
         NaivePointSet naivePointSet = new NaivePointSet(List.of(p1, p2, p3, p3, p4, p5));
-        Point nearestNaivePointSet = naivePointSet.nearest(9, 3);
 
+        Point nearestKDTree = kdTree.nearest(9, 3);
+        Point nearestNaivePointSet = naivePointSet.nearest(9, 3);
+        assertEquals(nearestKDTree, nearestNaivePointSet);
+
+        nearestKDTree = kdTree.nearest(0, 7);
+        nearestNaivePointSet = naivePointSet.nearest(0, 7);
         assertEquals(nearestKDTree, nearestNaivePointSet);
     }
 
@@ -72,7 +78,7 @@ public class KDTreeTest {
     }
 
     @Test
-    public void timingTest() {
+    public void oldTimingTest() {
         List<Point> randomPoints = new ArrayList<>();
 
         for (int i = 0; i < 100000; i++) {
@@ -104,9 +110,86 @@ public class KDTreeTest {
         }
         Double kdTime = sw.elapsedTime();
 
-        System.out.println("kdTime and naiveTime: " + kdTime + " and " + naiveTime + "  seconds");
-        //assertTrue(kdTime/naiveTime < 0.1);
+        System.out.println("kdTime and naiveTime: " + kdTime + " and " + naiveTime + " seconds");
+        assertTrue(kdTime/naiveTime < 0.1);
+    }
 
+    @Test
+    public void randomizedDoubleTest() {
+        int treeSize = 100000;
+        int queries = 1000;
+
+        List<Point> randomPoints = randomPoints(treeSize);
+        List<Point> randomQueries = randomPoints(queries);
+
+        PointSet naivePointSet = new NaivePointSet(randomPoints);
+        PointSet kdTree = new KDTree(randomPoints);
+
+        for (Point point : randomQueries) {
+            Double x = point.getX();
+            Double y = point.getY();
+            assertEquals(naivePointSet.nearest(x, y), kdTree.nearest(x, y));
+        }
+    }
+
+    @Test
+    public void timingTest() {
+        List<Integer> treeSize = List.of(10000, 100000, 100000);
+        List<Integer> queries = List.of(100, 1000, 10000);
+
+
+        PointSet kdTree = null;
+        PointSet naivePointSet = null;
+
+        Stopwatch sw;
+
+        for (int i : treeSize) {
+            List<Point> randomPoints = randomPoints(i);
+
+            sw = new Stopwatch();
+            kdTree = new KDTree(randomPoints);
+            System.out.print("Constructor for KDTree and NaivePointSet (" + i + "): " + sw.elapsedTime());
+
+            sw = new Stopwatch();
+            naivePointSet = new NaivePointSet(randomPoints);
+            System.out.println(" and " + sw.elapsedTime() + ".");
+        }
+
+        for (int i : queries) {
+            List<Point> randomQueryPoints = randomPoints(i);
+
+            sw = new Stopwatch();
+            randomQueries(kdTree, randomQueryPoints);
+            Double kdTime = sw.elapsedTime();
+
+            sw = new Stopwatch();
+            randomQueries(naivePointSet, randomQueryPoints);
+            Double naiveTime = sw.elapsedTime();
+            System.out.println("Nearest for KDTree and NaivePointSet (" + i + "): " + kdTime + " and " + naiveTime + ".");
+
+            assertTrue(kdTime/naiveTime < 0.1);
+        }
+    }
+
+    private static void randomQueries(PointSet pointSet, List<Point> queryPoints) {
+        for (Point point : queryPoints) {
+            pointSet.nearest(point.getX(), point.getY());
+        }
+    }
+
+    private static List<Point> randomPoints(int n) {
+        List<Point> randomPoints = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            randomPoints.add(randomPoint());
+        }
+        return randomPoints;
+    }
+
+    private static Point randomPoint() {
+        Double x = random.nextDouble();
+        Double y = random.nextDouble();
+        return new Point(x, y);
     }
 
     private static int generateRandomInt(int upperRange){
