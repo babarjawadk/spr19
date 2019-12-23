@@ -14,7 +14,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private List<Vertex> solution;
     private double time;
     private double maxTime;
-    private int states = 1;
+    private int states = 0;
 
     private AStarGraph<Vertex> graph;
     private Vertex first;
@@ -26,26 +26,29 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
 
 
     public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
-        Stopwatch sw = new Stopwatch();
-
         graph = input;
         maxTime = timeout;
         first = start;
         last = end;
+        time = solve();
+        outcome = calculateOutcome();
+        totalWeight = calculateWeight();
+        solution = calculatePath();
+    }
 
-        distTo.put(start, 0.0);
-        pq.add(start, h(start, end));
+    private double solve() {
+        Stopwatch sw = new Stopwatch();
 
-        while ((!pq.isEmpty() && !pq.getSmallest().equals(end)) || sw.elapsedTime() > timeout) {
-            for (WeightedEdge<Vertex> we : input.neighbors(pq.removeSmallest())) {
+        distTo.put(first, 0.0);
+        pq.add(first, h(first, last));
+
+        while (sw.elapsedTime() <= maxTime && !pq.isEmpty() && !pq.getSmallest().equals(last)) {
+            for (WeightedEdge<Vertex> we : graph.neighbors(pq.removeSmallest())) {
                 relax(we);
             }
             states++;
         }
-        time = sw.elapsedTime();
-        outcome = calculateOutcome();
-        totalWeight = calculateWeight();
-        solution = calculatePath();
+        return sw.elapsedTime();
     }
 
 
@@ -56,7 +59,6 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
 
         if (distTo.get(q) == null || distTo.get(p) + weight < distTo.get(q)) {
             update(p, q, weight);
-            states++;
         }
     }
 
@@ -84,7 +86,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         if (outcome.equals(SolverOutcome.TIMEOUT) || outcome.equals(SolverOutcome.UNSOLVABLE)) {
             return 0.0;
         } else {
-            return distTo.get(last); // return helperWeight(last);
+            return distTo.get(last);
         }
     }
 
@@ -95,13 +97,6 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             return helperPath(last, new ArrayList<Vertex>());
         }
     }
-
-    /*private double helperWeight(Vertex v) {
-        if (v.equals(first)) {
-            return distTo.get(v);
-        }
-        return distTo.get(v) + helperWeight(edgeTo.get(v));
-    }*/
 
     private List<Vertex> helperPath(Vertex v, List<Vertex> list) {
         if (v.equals(first)) {

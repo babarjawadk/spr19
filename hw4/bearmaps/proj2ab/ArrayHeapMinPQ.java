@@ -64,7 +64,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
 
     public void addOrUpdate(T item, double priority) {
-        if (hashMap.containsKey(item)) {
+        if (contains(item)) {
             changePriority(item, priority);
         } else {
             add(item, priority);
