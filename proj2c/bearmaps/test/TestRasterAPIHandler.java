@@ -1,5 +1,6 @@
 package bearmaps.test;
 
+import bearmaps.proj2c.utils.Tile;
 import org.junit.Before;
 import org.junit.Test;
 import bearmaps.proj2c.server.handler.impl.RasterAPIHandler;
@@ -29,7 +30,6 @@ public class TestRasterAPIHandler {
     private static final int NUM_TESTS = 8;
     private static RasterAPIHandler rasterer;
 
-
     @Before
     public void setUp() throws Exception {
         rasterer = new RasterAPIHandler();
@@ -49,6 +49,45 @@ public class TestRasterAPIHandler {
                          + mapToString(params) + ".\n";
             checkParamsMap(msg, expected, actual);
         }
+    }
+
+    @Test
+    public void testTileCreation() {
+        Tile a = new Tile(0, 0, 0);
+        assertEquals(a.ullon, -122.2998046875, 0.0000000001);
+        assertEquals(a.ullat, 37.892195547244356, 0.0000000001);
+        assertEquals(a.lrlon, -122.2119140625, 0.0000000001);
+        assertEquals(a.lrlat, 37.82280243352756, 0.0000000001);
+
+        Tile b = new Tile(1, 0, 0);
+        assertEquals(b.ullon, -122.2998046875, 0.0000000001);
+        assertEquals(b.ullat, 37.892195547244356, 0.0000000001);
+        assertEquals(b.lrlon, -122.255859375, 0.0000000001);
+        assertEquals(b.lrlat, 37.85749899038596, 0.0000000001);
+
+        Tile c = new Tile(1, 0, 1);
+        assertEquals(c.ullon, -122.2998046875, 0.0000000001);
+        assertEquals(c.ullat, 37.85749899038596, 0.0000000001);
+        assertEquals(c.lrlon, -122.255859375, 0.0000000001);
+        assertEquals(c.lrlat, 37.82280243352756, 0.0000000001);
+
+        Tile d = new Tile(2, 1, 2);
+        assertEquals(d.ullon, -122.27783203125, 0.0000000001);
+        assertEquals(d.ullat, 37.85749899038596, 0.0000000001);
+        assertEquals(d.lrlon, -122.255859375, 0.0000000001);
+        assertEquals(d.lrlat, 37.84015071195676, 0.0000000001);
+
+        Tile e = new Tile(7, 4, 6);
+        assertEquals(e.ullon, -122.29705810546875, 0.0000000001);
+        assertEquals(e.ullat, 37.88894274503888, 0.0000000001);
+        assertEquals(e.lrlon, -122.29637145996094, 0.0000000001);
+        assertEquals(e.lrlat, 37.88840061133797, 0.0000000001);
+
+        Tile f = new Tile(7, 14, 21);
+        assertEquals(f.ullon, -122.29019165039062, 0.0000000001);
+        assertEquals(f.ullat, 37.880810739525195, 0.0000000001);
+        assertEquals(f.lrlon, -122.28950500488281, 0.0000000001);
+        assertEquals(f.lrlat, 37.880268605824284, 0.0000000001);
     }
 
     private List<Map<String, Double>> paramsFromFile() throws Exception {

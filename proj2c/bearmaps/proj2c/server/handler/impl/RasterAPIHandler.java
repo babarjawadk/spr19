@@ -2,6 +2,8 @@ package bearmaps.proj2c.server.handler.impl;
 
 import bearmaps.proj2c.AugmentedStreetMapGraph;
 import bearmaps.proj2c.server.handler.APIRouteHandler;
+import bearmaps.proj2c.utils.Tile;
+
 import spark.Request;
 import spark.Response;
 import bearmaps.proj2c.utils.Constants;
@@ -17,13 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2c.utils.Constants.*;
+import static bearmaps.proj2c.utils.Tile.*;
 
 /**
  * Handles requests from the web browser for map images. These images
  * will be rastered into one large image to be displayed to the user.
- * @author rahul, Josh Hug, _________
+ * @author rahul, Josh Hug, Jawad
  */
 public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<String, Object>> {
 
@@ -84,11 +86,32 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      */
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        //System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        //System.out.println(requestParams);
+        double lrlon = requestParams.get("lrlon");
+        double ullon = requestParams.get("ullon");
+        double w = requestParams.get("w");
+        double ullat = requestParams.get("ullat");
+        double lrlat = requestParams.get("lrlat");
+
+        if ((ullon > ROOT_LRLON && ullat > ROOT_LRLAT) || (lrlon < ROOT_ULLON && lrlat < ROOT_ULLAT)) {
+            return queryFail();
+        }
+        double lonDPPAsked = lonDPP(ullon-lrlon , w);
+        int depth = findDepth(lonDPPAsked);
+        Tile ul = findTile(ullon, ullat, depth);
+        Tile lr = findTile(lrlon, lrlat, depth);
+        String[][] render_grid = makeGrid(ul, lr);
+        return querySuccess(ul, lr, render_grid, depth);
+    }
+
+    private Map<String, Object> querySuccess(Tile ul, Tile lr, String[][] render_grid, int depth) {
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+        results.put("render_grid", render_grid);
+        results.put("raster_ul_lon", ul.ullon);
+        results.put("raster_ul_lat", ul.ullat);
+        results.put("raster_lr_lon", lr.lrlon);
+        results.put("raster_lr_lat", lr.lrlat);
+        results.put("depth", depth);
+        results.put("query_success", true);
         return results;
     }
 
@@ -198,7 +221,6 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private BufferedImage getImage(String imgPath) {
