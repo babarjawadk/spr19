@@ -7,16 +7,20 @@ import static bearmaps.proj2c.utils.Constants.*;
  * Created by Jawad
  */
 public class Tile {
-    public final int depth;
-    public final int x;
-    public final int y;
-    public final String filename;
-    public final double ullon;
-    public final double ullat;
-    public final double lrlon;
-    public final double lrlat;
+    public int depth;
+    public int x;
+    public int y;
+    public String filename;
+    public double ullon;
+    public double ullat;
+    public double lrlon;
+    public double lrlat;
 
     public Tile(int d, int xLab, int yLab) {
+        initialize(d, xLab, yLab);
+    }
+
+    public void initialize(int d, int xLab, int yLab) {
         depth = d;
         x = xLab;
         y = yLab;
@@ -36,6 +40,10 @@ public class Tile {
             lrlon = ullon + width;
             lrlat = ullat - height;
         }
+    }
+
+    public void modify(int d, int xLab, int yLab) {
+        initialize(d, xLab, yLab);
     }
 
     public boolean notFound() {
@@ -79,13 +87,13 @@ public class Tile {
         if (ul.notFound()) {
             int x = Math.max(0, ul.x);
             int y = Math.max(0, ul.y);
-            ul = new Tile(depth, x, y);
+            ul.modify(depth, x, y);
         }
         if (lr.notFound()) {
             int max = (int) Math.pow(2, depth) - 1;
             int x = Math.min(lr.x, max);
             int y = Math.min(lr.y, max);
-            lr = new Tile(depth, x, y);
+            lr.modify(depth, x, y);
         }
 
         int iMax = lr.y-ul.y+1;

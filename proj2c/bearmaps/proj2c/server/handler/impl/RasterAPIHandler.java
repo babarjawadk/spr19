@@ -92,7 +92,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         double ullat = requestParams.get("ullat");
         double lrlat = requestParams.get("lrlat");
 
-        if ((ullon > ROOT_LRLON && ullat > ROOT_LRLAT) || (lrlon < ROOT_ULLON && lrlat < ROOT_ULLAT)) {
+        if (isOutsideAvailableMap(lrlon, ullon, ullat, lrlat)) {
             return queryFail();
         }
         double lonDPPAsked = lonDPP(ullon-lrlon , w);
@@ -101,6 +101,10 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         Tile lr = findTile(lrlon, lrlat, depth);
         String[][] render_grid = makeGrid(ul, lr);
         return querySuccess(ul, lr, render_grid, depth);
+    }
+
+    private boolean isOutsideAvailableMap(double lrlon, double ullon, double ullat, double lrlat) {
+        return ullon > ROOT_LRLON || ullat < ROOT_LRLAT || lrlon < ROOT_ULLON || lrlat > ROOT_ULLAT;
     }
 
     private Map<String, Object> querySuccess(Tile ul, Tile lr, String[][] render_grid, int depth) {
