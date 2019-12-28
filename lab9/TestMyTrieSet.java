@@ -6,19 +6,18 @@ import java.util.List;
  * Created by Jenny Huang on 3/12/19.
  */
 public class TestMyTrieSet {
-
     // assumes add/contains work
     @Test
     public void sanityClearTest() {
         MyTrieSet t = new MyTrieSet();
-        for (int i = 0; i < 455; i++) {
-            t.add("hi" + i);
+        for (int i = 20; i < 123; i++) {
+            t.add("hi" + (char) i);
             //make sure put is working via contains
-            assertTrue(t.contains("hi" + i));
+            assertTrue(t.contains("hi" + (char) i));
         }
         t.clear();
-        for (int i = 0; i < 455; i++) {
-            assertFalse(t.contains("hi" + i));
+        for (int i = 20; i < 123; i++) {
+            assertFalse(t.contains("hi" + (char) i));
         }
     }
 
@@ -29,6 +28,9 @@ public class TestMyTrieSet {
         assertFalse(t.contains("waterYouDoingHere"));
         t.add("waterYouDoingHere");
         assertTrue(t.contains("waterYouDoingHere"));
+        assertFalse(t.contains("wateryoudoinghere"));
+        t.add("wateryoudoinghere");
+        assertTrue(t.contains("wateryoudoinghere"));
     }
 
     // assumes add works
@@ -53,9 +55,4 @@ public class TestMyTrieSet {
             assertFalse(keys.contains(s));
         }
     }
-
-
-
-
-
 }

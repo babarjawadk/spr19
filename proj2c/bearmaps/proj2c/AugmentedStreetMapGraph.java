@@ -2,6 +2,7 @@ package bearmaps.proj2c;
 
 import bearmaps.hw4.streetmap.Node;
 import bearmaps.hw4.streetmap.StreetMapGraph;
+import bearmaps.lab9.MyTrieSet;
 import bearmaps.proj2ab.KDTree;
 import bearmaps.proj2ab.Point;
 
@@ -19,6 +20,7 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
 
     private Map<Point, Node> hashMap = new HashMap<>();
     private KDTree kdTree;
+    private MyTrieSet trie = new MyTrieSet();
 
     public AugmentedStreetMapGraph(String dbPath) {
         super(dbPath);
@@ -29,6 +31,10 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
                 Point point = new Point(node.lon(), node.lat());
                 points.add(point);
                 hashMap.put(point, node);
+            }
+
+            if (node.name() != null) {
+                trie.add(cleanString(node.name()), node);
             }
         }
         kdTree = new KDTree(points);
@@ -57,7 +63,17 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * cleaned <code>prefix</code>.
      */
     public List<String> getLocationsByPrefix(String prefix) {
-        return new LinkedList<>();
+
+        List<String> results = new LinkedList<>();
+        List<String> cleanedResults = new LinkedList<>();
+        for (Node node : trie.keysWithPrefix(cleanString(prefix))) {
+            if (!cleanedResults.contains(cleanString(node.name()))) {
+                results.add(node.name());
+                cleanedResults.add(cleanString(node.name()));
+            }
+        }
+
+        return results;
     }
 
     /**
@@ -74,7 +90,18 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * "id" -> Number, The id of the node. <br>
      */
     public List<Map<String, Object>> getLocations(String locationName) {
-        return new LinkedList<>();
+        List<Map<String, Object>> list = new LinkedList<>();
+
+        for (Node node : trie.get(cleanString(locationName))) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("lat", node.lat());
+            map.put("lon", node.lon());
+            map.put("name", node.name());
+            map.put("id", node.id());
+            list.add(map);
+        }
+
+        return list;
     }
 
 
@@ -87,5 +114,4 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
     private static String cleanString(String s) {
         return s.replaceAll("[^a-zA-Z ]", "").toLowerCase();
     }
-
 }

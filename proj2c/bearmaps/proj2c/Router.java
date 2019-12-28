@@ -1,11 +1,15 @@
 package bearmaps.proj2c;
 
 import bearmaps.hw4.AStarSolver;
+import bearmaps.proj2ab.Point;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
 
 /**
  * This class acts as a helper for the RoutingAPIHandler.
@@ -41,7 +45,65 @@ public class Router {
      */
     public static List<NavigationDirection> routeDirections(AugmentedStreetMapGraph g, List<Long> route) {
         /* fill in for part IV */
-        return null;
+        List<NavigationDirection> directions = new LinkedList<>();
+
+
+        long id = route.remove(0);
+        Point prevPoint = new Point(g.lat(id), g.lon(id));
+        String prevName = getName(g, id);
+
+        id = route.remove(0);
+        Point currPoint = new Point(g.lat(id), g.lon(id));
+        String currName = getName(g, id);
+
+        double distance = Point.distance(prevPoint, currPoint);
+        double prevBearing;
+        double currBearing = NavigationDirection.bearing(prevPoint.getX(), currPoint.getX(), prevPoint.getY(), currPoint.getY());
+
+        NavigationDirection navigationDirection = new NavigationDirection();
+        int direction = NavigationDirection.START;
+        navigationDirection.direction = direction;
+        navigationDirection.way = prevName;
+        navigationDirection.distance = distance;
+
+        directions.add(navigationDirection);
+
+        while (!route.isEmpty()) {
+            prevPoint = currPoint;
+            prevName = currName;
+            prevBearing = currBearing;
+
+            id = route.remove(0);
+            currPoint = new Point(g.lat(id), g.lon(id));
+            currName = getName(g, id);
+            currBearing = NavigationDirection.bearing(prevPoint.getX(), currPoint.getX(), prevPoint.getY(), currPoint.getY());
+
+            direction = NavigationDirection.getDirection(prevBearing, currBearing);
+
+            if (direction == NavigationDirection.STRAIGHT) {
+                navigationDirection.distance += Point.distance(prevPoint, currPoint);
+            } else {
+                navigationDirection = new NavigationDirection();
+                navigationDirection.direction = direction;
+
+                distance = Point.distance(prevPoint, currPoint);
+                navigationDirection.way = prevName;
+                navigationDirection.distance = distance;
+                directions.add(navigationDirection);
+            }
+
+        }
+
+
+        return directions;
+    }
+
+    private static String getName(AugmentedStreetMapGraph graph, long id) {
+        if (graph.name(id) == null) {
+            return NavigationDirection.UNKNOWN_ROAD;
+        } else {
+            return graph.name(id);
+        }
     }
 
     /**
@@ -117,7 +179,7 @@ public class Router {
             if (m.matches()) {
                 String direction = m.group(1);
                 if (direction.equals("Start")) {
-                    nd.direction = NavigationDirection.START;
+                    nd.direction = START;
                 } else if (direction.equals("Go straight")) {
                     nd.direction = NavigationDirection.STRAIGHT;
                 } else if (direction.equals("Slight left")) {
