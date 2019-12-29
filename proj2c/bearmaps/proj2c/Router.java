@@ -47,7 +47,6 @@ public class Router {
         /* fill in for part IV */
         List<NavigationDirection> directions = new LinkedList<>();
 
-
         long id = route.remove(0);
         Point prevPoint = new Point(g.lat(id), g.lon(id));
         String prevName = getName(g, id);
@@ -91,10 +90,7 @@ public class Router {
                 navigationDirection.distance = distance;
                 directions.add(navigationDirection);
             }
-
         }
-
-
         return directions;
     }
 
