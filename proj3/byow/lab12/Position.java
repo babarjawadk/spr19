@@ -1,10 +1,10 @@
 package byow.lab12;
 
 public class Position {
-    int x;
-    int y;
+    public int x;
+    public int y;
 
-    Position(int a, int b) {
+    public Position(int a, int b) {
         x = a;
         y = b;
     }

@@ -97,5 +97,4 @@ public class HexWorld {
         drawTessalation(world, 3);
         ter.renderFrame(world);
     }
-
 }
