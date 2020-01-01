@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GenerateWorldOld {
+public class GenerateWorld1 {
 
     private class Room {
         private final int width;
@@ -58,7 +58,7 @@ public class GenerateWorldOld {
 
     TETile[][] world;
 
-    GenerateWorldOld(int w, int h, long s) {
+    GenerateWorld1(int w, int h, long s) {
         WIDTH = w;
         HEIGHT = h;
         SEED = s;
