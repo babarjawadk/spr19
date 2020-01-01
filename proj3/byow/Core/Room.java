@@ -11,47 +11,80 @@ import java.util.Random;
 
 public class Room implements Inside {
 
+    private static final int lowerBound = 2;
+    private static final int upperBound = 6;
+
+
     private static final int NORTH = 0;
     private static final int EAST = 1;
     private static final int SOUTH = 2;
     private static final int WEST = 3;
 
-    static int SEED = 1000;
+    static long SEED = 1000;
     static Random RANDOM = new Random(SEED);
     static int worldWidth = 90;
     static int worldHeight = 30;
     static TETile[][] world = new TETile[worldWidth][worldHeight];
 
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
     //private final int worldWidth;
     //private final int worldHeight;
     //private final boolean isBuildable;
     //private final TETile[][] world;
-    private final Position topLeft;
-    private final Position topRight;
-    private final Position bottomLeft;
-    private final Position bottomRight;
+    private Position topLeft;
+    private Position topRight;
+    private Position bottomLeft;
+    private Position bottomRight;
 
     //private final int SEED;
     //private final Random RANDOM;
 
-    private List<Integer> directions = new ArrayList<>(Arrays.asList(NORTH, EAST, SOUTH, WEST));
+    List<Integer> directions = new ArrayList<>(Arrays.asList(NORTH, EAST, SOUTH, WEST));
 
-    public Room(Position position, int roomWidth, int roomHeight, TETile[][] worldGrid,
-                int wWidth, int wHeight, List<Inside> insides, int seed) {
+    public Room(Position p, int w, int h) {
         //SEED = seed;
         //RANDOM = new Random(SEED);
         //world = worldGrid;
         //worldWidth = wWidth;
         //worldHeight = wHeight;
-        width = roomWidth;
-        height = roomHeight;
-        bottomLeft = position;
+        initializeParameters(p, w, h);
+        /*
+        width = w;
+        height = h;
+        bottomLeft = p;
         bottomRight = calculateBottomRight();
         topLeft = calculateTopLeft();
         topRight = calculateTopRight();
+        */
+
         //isBuildable = isBuildable(insides);
+    }
+
+    public Room(List<Inside> insides) {
+        initializeParameters(randomPosition(), randomLength(), randomLength());
+        while (!isBuildable(insides)) {
+            initializeParameters(randomPosition(), randomLength(), randomLength());
+        }
+    }
+
+    private void initializeParameters(Position p, int w, int h) {
+        width = w;
+        height = h;
+        bottomLeft = p;
+        bottomRight = calculateBottomRight();
+        topLeft = calculateTopLeft();
+        topRight = calculateTopRight();
+    }
+
+    private static Position randomPosition() {
+        int x = RANDOM.nextInt(worldWidth);
+        int y = RANDOM.nextInt(worldHeight);
+        return new Position(x, y);
+    }
+
+    private static int randomLength() {
+        return RANDOM.nextInt(upperBound - lowerBound) + lowerBound;
     }
 
     private Position calculateBottomRight() {
@@ -102,7 +135,7 @@ public class Room implements Inside {
         }
     }
 
-    @Override
+    /*@Override
     public int worldWidth() {
         return worldWidth;
     }
@@ -115,7 +148,7 @@ public class Room implements Inside {
     @Override
     public TETile[][] world() {
         return world;
-    }
+    }*/
 
     @Override
     public int width() {
@@ -152,6 +185,7 @@ public class Room implements Inside {
         return isBuildable;
     }*/
 
+    /*
     public Hallway makeRandomHallway(List<Inside> insides) {
         int direction = directions.remove(RANDOM.nextInt(directions.size()-1));
         int length = RANDOM.nextInt(6) + 2;
@@ -167,6 +201,8 @@ public class Room implements Inside {
         }
         return new Hallway(position, length, direction, world, )
     }
+    */
+
 
     /*public static List<Inside> createRandomRooms(int maxRooms, Random random,
                                                  TETile[][] world, int worldWidth, int worldHeight) {

@@ -13,11 +13,11 @@ public interface Inside {
     public static final int SOUTH = 2;
     public static final int WEST = 3;*/
 
-    int worldWidth();
+    /*int worldWidth();
 
     int worldHeight();
 
-    TETile[][] world();
+    TETile[][] world();*/
 
     int width();
 
@@ -40,7 +40,7 @@ public interface Inside {
             for (int j = 0; j < height(); j++) {
                 int x = bottomLeft().x + i;
                 int y = bottomLeft().y + j;
-                world()[x][y] = Tileset.FLOOR;
+                Room.world[x][y] = Tileset.FLOOR;
             }
         }
     }
@@ -72,7 +72,7 @@ public interface Inside {
     }
 
     private boolean isInsideWorld(Position p) {
-        return p.x > 0 && p.x < worldWidth()-1 && p.y > 0 && p.y < worldHeight()-1;
+        return p.x > 0 && p.x < Room.worldWidth-1 && p.y > 0 && p.y < Room.worldHeight-1;
     }
 
     private boolean overlap(Inside inside) {

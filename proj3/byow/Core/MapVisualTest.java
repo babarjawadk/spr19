@@ -31,8 +31,7 @@ public class MapVisualTest {
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         GenerateWorld gw = new GenerateWorld(WIDTH, HEIGHT, SEED);
-        TETile[][] world = gw.getWorld();
-        ter.renderFrame(world);
+        ter.renderFrame(gw.world);
 
 
     }

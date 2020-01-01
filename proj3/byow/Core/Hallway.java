@@ -4,10 +4,10 @@ import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 import byow.lab12.Position;
 
-import java.util.List;
+
 import java.util.Random;
 
-import static byow.Core.GenerateWorld.createEmptyWorld;
+
 
 public class Hallway implements Inside {
 
@@ -16,7 +16,7 @@ public class Hallway implements Inside {
     private static final int SOUTH = 2;
     private static final int WEST = 3;
 
-    static int SEED = 1000;
+    static long SEED = 1000;
     static Random RANDOM = new Random(SEED);
     static int worldWidth = 90;
     static int worldHeight = 30;
@@ -36,19 +36,18 @@ public class Hallway implements Inside {
 
 
 
-    public Hallway(Position position, int hallwayLength, int dir, TETile[][] worldGrid,
-                   int wWidth, int wHeight, List<Inside> insides, int seed) {
-        SEED = seed;
-        RANDOM = new Random(SEED);
-        world = worldGrid;
-        worldWidth = wWidth;
-        worldHeight = wHeight;
-        length = hallwayLength;
-        direction = dir;
-        bottomLeft = calculateBottomLeft(position);
-        bottomRight = calculateBottomRight(position);
-        topLeft = calculateTopLeft(position);
-        topRight = calculateTopRight(position);
+    public Hallway(Position p, int l, int d) {
+        //SEED = seed;
+        //RANDOM = new Random(SEED);
+        //world = worldGrid;
+        //worldWidth = wWidth;
+        //worldHeight = wHeight;
+        length = l;
+        direction = d;
+        bottomLeft = calculateBottomLeft(p);
+        bottomRight = calculateBottomRight(p);
+        topLeft = calculateTopLeft(p);
+        topRight = calculateTopRight(p);
         //isBuildable = isBuildable(insides);
     }
 
@@ -131,7 +130,7 @@ public class Hallway implements Inside {
         return direction;
     }
 
-    @Override
+    /*@Override
     public int worldWidth() {
         return worldWidth;
     }
@@ -144,7 +143,7 @@ public class Hallway implements Inside {
     @Override
     public TETile[][] world() {
         return world;
-    }
+    }*/
 
     @Override
     public int width() {

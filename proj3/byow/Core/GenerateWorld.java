@@ -10,14 +10,15 @@ import java.util.Random;
 
 public class GenerateWorld {
 
-    private final int WIDTH;
-    private final int HEIGHT;
-    private final long SEED;
-    private final Random RANDOM;
-    private final int maxRooms;
+    final int WIDTH;
+    final int HEIGHT;
+    final long SEED;
+    final Random RANDOM;
+    final TETile[][] world;
+
+    //private final int maxRooms;
     private List<Inside> insides;
 
-    private final TETile[][] world;
 
 
     GenerateWorld(int w, int h, long s) {
@@ -26,25 +27,47 @@ public class GenerateWorld {
         SEED = s;
         RANDOM = new Random(SEED);
         world = createEmptyWorld(WIDTH, HEIGHT);
-        maxRooms = RANDOM.nextInt(40) + 20;
+        setParameters();
+
+        //maxRooms = RANDOM.nextInt(40) + 20;
         //insides = createRandomRooms(maxRooms, RANDOM, world, WIDTH, HEIGHT);
         //createRandomRooms();
         insides = new ArrayList<Inside>();
 
-        Room room = new Room(new Position(45, 15), 5, 5, world, WIDTH, HEIGHT, insides);
-        room.draw();
+        for (int i = 0; i < 40; i++) {
+            Room room = new Room(insides);
+            room.draw();
+            insides.add(room);
+        }
+
+        //Room room = new Room(new Position(45, 15), 5, 5);
+        //room.draw();
 
         //int x = room.topLeft().x + 3;
         //int y = room.topLeft().y + 1;
-        Position position = room.makeRandomHallway(RANDOM);
+        /*Position position = room.makeRandomHallway(RANDOM);
         Hallway hallway = new Hallway(position, 5, NORTH, world, WIDTH, HEIGHT, insides);
-        hallway.draw();
+        hallway.draw();*/
 
         //HALLWAY:
         //close(); (draw wall, 3 squares)
         //findRandomBottomLeft; (return position)
         //ROOM:
         //findRandomStartHallway (return position)
+    }
+
+    private void setParameters() {
+        Hallway.SEED = SEED;
+        Hallway.RANDOM = RANDOM;
+        Hallway.worldWidth = WIDTH;
+        Hallway.worldHeight = HEIGHT;
+        Hallway.world = world;
+
+        Room.SEED = SEED;
+        Room.RANDOM = RANDOM;
+        Room.worldWidth = WIDTH;
+        Room.worldHeight = HEIGHT;
+        Room.world = world;
     }
 
     private static TETile[][] createEmptyWorld(int w, int h) {
@@ -54,10 +77,6 @@ public class GenerateWorld {
                 world[x][y] = Tileset.NOTHING;
             }
         }
-        return world;
-    }
-
-    public TETile[][] getWorld() {
         return world;
     }
 }
